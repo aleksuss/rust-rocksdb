@@ -1,11 +1,19 @@
 # Changelog
 
-## Unreleased
+### Unreleased
 
-### Added
+### Changes
 
 * `DB::get_updates_since()` to iterate write batches in a given sequence (nlfiedler).
-* `ReadOptions::set_tailing()` to create a tailing iterator that continues to iterate over the database as new records are added.
+* `ReadOptions::set_tailing()` to create a tailing iterator that continues 
+  to iterate over the database as new records are added (cjbradfield).
+* Changed column families storing (aleksuss).
+
+## 0.12.4 (2019-10-08)
+
+### Changes
+
+* Bumped RocksDB to 6.1.2 (vitvakatu)
 
 ## 0.12.3 (2019-07-19)
 
@@ -13,11 +21,9 @@
 
 * Enabled sse4.2/pclmul for accelerated crc32c (yjh0502)
 * Added `set_db_write_buffer_size` to the Options API (rnarubin)
-* Bumped RocksDB to 6.1.2 (lispy)
 * Added `Sync` and `Send` implementations to `Snapshot` (pavel-mukhanov)
 * Added `raw_iterator_cf_opt` to the DB API (rnarubin)
 * Added `DB::latest_sequence_number` method (vitvakatu)
-* Changed column families storing (aleksuss)
 
 ## 0.12.2 (2019-05-03)
 
