@@ -8,6 +8,8 @@ jobs:
       - windows-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: true
       - name: Install dependencies
         run: choco install llvm -y
       - name: Run librocksdb-sys tests
