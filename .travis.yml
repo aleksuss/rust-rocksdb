@@ -13,6 +13,14 @@ jobs:
   allow_failures:
     - os: windows
 
+before_install:
+  - |-
+    case $TRAVIS_OS_NAME in
+      windows)
+        dir env:
+        ;;
+    esac
+
 #install:
 #  - rustup component add rustfmt
 #  - rustfmt -V
