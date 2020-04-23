@@ -135,6 +135,7 @@ fn build_rocksdb() {
         config.define("WIN64", Some("1"));
         config.define("_MBCS", Some("1"));
         config.define("NOMINMAX", Some("1"));
+        config.define("_PTRDIFF_T_DEFINED", Some("1"));
         config.define("ROCKSDB_WINDOWS_UTF8_FILENAMES", Some("1"));
         if &target == "x86_64-pc-windows-gnu" {
             // Tell MinGW to create localtime_r wrapper of localtime_s function.
