@@ -38,7 +38,6 @@ fn bindgen_rocksdb() {
         .header(rocksdb_include_dir() + "/rocksdb/c.h")
         .derive_debug(false)
         .blacklist_type("max_align_t") // https://github.com/rust-lang-nursery/rust-bindgen/issues/550
-        .blacklist_type("__int64")
         .ctypes_prefix("libc")
         .size_t_is_usize(true)
         .generate()
@@ -133,6 +132,7 @@ fn build_rocksdb() {
         link("shlwapi", false);
         config.define("OS_WIN", Some("1"));
         config.define("ROCKSDB_WINDOWS_UTF8_FILENAMES", Some("1"));
+        config.define("_UINTPTR_T_DEFINED", Some("1"));
         if &target == "x86_64-pc-windows-gnu" {
             // Tell MinGW to create localtime_r wrapper of localtime_s function.
             config.define("_POSIX_C_SOURCE", None);
