@@ -92,7 +92,7 @@ fn build_rocksdb() {
         .map(str::trim)
         .collect::<Vec<&'static str>>();
 
-    // We have a pregenerated a version of build_version.cc in the local directory
+    // We have a pre-generated version of the build_version.cc in the local directory
     lib_sources = lib_sources
         .iter()
         .cloned()
@@ -131,8 +131,11 @@ fn build_rocksdb() {
         link("rpcrt4", false);
         link("shlwapi", false);
         config.define("OS_WIN", Some("1"));
+        config.define("WIN32", Some("1"));
+        config.define("WIN64", Some("1"));
+        config.define("_MBCS", Some("1"));
+        config.define("NOMINMAX", Some("1"));
         config.define("ROCKSDB_WINDOWS_UTF8_FILENAMES", Some("1"));
-        config.define("_UINTPTR_T_DEFINED", Some("1"));
         if &target == "x86_64-pc-windows-gnu" {
             // Tell MinGW to create localtime_r wrapper of localtime_s function.
             config.define("_POSIX_C_SOURCE", None);
