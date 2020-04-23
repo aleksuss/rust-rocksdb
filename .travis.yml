@@ -18,6 +18,6 @@ jobs:
 #  - rustfmt -V
 
 script:
-  - cargo buid --verbose
+  - cargo build --verbose
 #  - cargo fmt --all -- --check
 #  - cargo test --manifest-path=librocksdb-sys/Cargo.toml --verbose
