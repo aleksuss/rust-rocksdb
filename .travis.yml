@@ -2,8 +2,8 @@ language: rust
 dist: bionic
 
 os:
-- linux
-- osx
+#- linux
+#- osx
 - windows
 
 rust:
@@ -13,11 +13,11 @@ jobs:
   allow_failures:
     - os: windows
 
-install:
-  - rustup component add rustfmt
-  - rustfmt -V
+#install:
+#  - rustup component add rustfmt
+#  - rustfmt -V
 
 script:
-  - cargo fmt --all -- --check
-  - cargo test --manifest-path=librocksdb-sys/Cargo.toml
-  - cargo test
+  - cargo buid --verbose
+#  - cargo fmt --all -- --check
+#  - cargo test --manifest-path=librocksdb-sys/Cargo.toml --verbose
