@@ -38,6 +38,7 @@ fn bindgen_rocksdb() {
         .header(rocksdb_include_dir() + "/rocksdb/c.h")
         .derive_debug(false)
         .blacklist_type("max_align_t") // https://github.com/rust-lang-nursery/rust-bindgen/issues/550
+        .blacklist_type("__int64")
         .ctypes_prefix("libc")
         .size_t_is_usize(true)
         .generate()
