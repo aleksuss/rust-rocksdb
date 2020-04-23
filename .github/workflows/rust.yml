@@ -1,0 +1,14 @@
+name: Windows build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on:
+      - windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run librocksdb-sys tests
+        run: cargo test --manifest-path=librocksdb-sys/Cargo.toml
+      - name: Run rocksdb tests
+        run: cargo test
