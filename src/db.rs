@@ -234,10 +234,9 @@ impl DB {
 
             // These handles will be populated by DB.
             let mut cfhandles: Vec<_> = cfs_v.iter().map(|_| ptr::null_mut()).collect();
-
             let cfopts: Vec<_> = cfs_v
                 .iter()
-                .map(|cf| cf.options.inner as *const _)
+                .map(|cf| cf.options.inner as *const ffi::rocksdb_options_t)
                 .collect();
 
             db = DB::open_cf_raw(
@@ -284,22 +283,22 @@ impl DB {
                     error_if_log_file_exist,
                 } => ffi_try!(ffi::rocksdb_open_for_read_only(
                     opts.inner,
-                    cpath.as_ptr() as *const _,
+                    cpath.as_ptr(),
                     error_if_log_file_exist as c_uchar,
                 )),
                 AccessType::ReadWrite => {
-                    ffi_try!(ffi::rocksdb_open(opts.inner, cpath.as_ptr() as *const _))
+                    ffi_try!(ffi::rocksdb_open(opts.inner, cpath.as_ptr()))
                 }
                 AccessType::Secondary { secondary_path } => {
                     ffi_try!(ffi::rocksdb_open_as_secondary(
                         opts.inner,
-                        cpath.as_ptr() as *const _,
-                        to_cpath(secondary_path)?.as_ptr() as *const _,
+                        cpath.as_ptr(),
+                        to_cpath(secondary_path)?.as_ptr(),
                     ))
                 }
                 AccessType::WithTTL { ttl } => ffi_try!(ffi::rocksdb_open_with_ttl(
                     opts.inner,
-                    cpath.as_ptr() as *const _,
+                    cpath.as_ptr(),
                     ttl.as_secs() as c_int,
                 )),
             }
@@ -321,31 +320,31 @@ impl DB {
                 AccessType::ReadOnly {
                     error_if_log_file_exist,
                 } => ffi_try!(ffi::rocksdb_open_for_read_only_column_families(
-                    opts.inner,
+                    opts.inner as *const ffi::rocksdb_options_t,
                     cpath.as_ptr(),
                     cfs_v.len() as c_int,
-                    cfnames.as_ptr(),
-                    cfopts.as_ptr(),
-                    cfhandles.as_mut_ptr(),
+                    cfnames.as_ptr() as *const *const libc::c_char,
+                    cfopts.as_ptr() as *const *const ffi::rocksdb_options_t,
+                    cfhandles.as_mut_ptr() as *mut *mut ffi::rocksdb_column_family_handle_t,
                     error_if_log_file_exist as c_uchar,
                 )),
                 AccessType::ReadWrite => ffi_try!(ffi::rocksdb_open_column_families(
-                    opts.inner,
+                    opts.inner as *const ffi::rocksdb_options_t,
                     cpath.as_ptr(),
                     cfs_v.len() as c_int,
-                    cfnames.as_ptr(),
-                    cfopts.as_ptr(),
-                    cfhandles.as_mut_ptr(),
+                    cfnames.as_ptr() as *const *const libc::c_char,
+                    cfopts.as_ptr() as *const *const ffi::rocksdb_options_t,
+                    cfhandles.as_mut_ptr() as *mut *mut ffi::rocksdb_column_family_handle_t
                 )),
                 AccessType::Secondary { secondary_path } => {
                     ffi_try!(ffi::rocksdb_open_as_secondary_column_families(
-                        opts.inner,
-                        cpath.as_ptr() as *const _,
-                        to_cpath(secondary_path)?.as_ptr() as *const _,
+                        opts.inner as *const ffi::rocksdb_options_t,
+                        cpath.as_ptr(),
+                        to_cpath(secondary_path)?.as_ptr(),
                         cfs_v.len() as c_int,
-                        cfnames.as_ptr(),
-                        cfopts.as_ptr(),
-                        cfhandles.as_mut_ptr(),
+                        cfnames.as_ptr() as *const *const libc::c_char,
+                        cfopts.as_ptr() as *const *const ffi::rocksdb_options_t,
+                        cfhandles.as_mut_ptr() as *mut *mut ffi::rocksdb_column_family_handle_t,
                     ))
                 }
                 _ => return Err(Error::new("Unsupported access type".to_owned())),
@@ -361,7 +360,7 @@ impl DB {
         unsafe {
             let ptr = ffi_try!(ffi::rocksdb_list_column_families(
                 opts.inner,
-                cpath.as_ptr() as *const _,
+                cpath.as_ptr(),
                 &mut length,
             ));
 
@@ -1253,7 +1252,7 @@ impl DB {
                 self.inner,
                 cpaths.as_ptr(),
                 paths_v.len(),
-                opts.inner as *const _
+                opts.inner
             ));
             Ok(())
         }
@@ -1272,7 +1271,7 @@ impl DB {
                 cf.inner,
                 cpaths.as_ptr(),
                 paths_v.len(),
-                opts.inner as *const _
+                opts.inner
             ));
             Ok(())
         }

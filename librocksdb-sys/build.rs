@@ -306,6 +306,10 @@ fn build_bzip2() {
 }
 
 fn try_to_find_and_link_lib(lib_name: &str) -> bool {
+    if env::var_os(&format!("{}_COMPILE", lib_name)).is_some() {
+        return false;
+    }
+
     if let Ok(lib_dir) = env::var(&format!("{}_LIB_DIR", lib_name)) {
         println!("cargo:rustc-link-search=native={}", lib_dir);
         let mode = match env::var_os(&format!("{}_STATIC", lib_name)) {

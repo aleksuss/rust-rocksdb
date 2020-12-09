@@ -20,7 +20,7 @@ use std::path::Path;
 use std::ptr;
 
 pub(crate) unsafe fn from_cstr(ptr: *const c_char) -> String {
-    let cstr = CStr::from_ptr(ptr as *const _);
+    let cstr = CStr::from_ptr(ptr);
     String::from_utf8_lossy(cstr.to_bytes()).into_owned()
 }
 

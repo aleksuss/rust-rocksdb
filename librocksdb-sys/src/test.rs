@@ -20,8 +20,8 @@ use std::str;
 
 use super::*;
 
-pub fn error_message(ptr: *const i8) -> String {
-    let c_str = unsafe { CStr::from_ptr(ptr as *const _) };
+pub fn error_message(ptr: *const libc::c_char) -> String {
+    let c_str = unsafe { CStr::from_ptr(ptr) };
     let s = str::from_utf8(c_str.to_bytes()).unwrap().to_owned();
     unsafe {
         free(ptr as *mut c_void);
@@ -44,7 +44,7 @@ fn internal() {
 
         let mut err: *mut c_char = ptr::null_mut();
         let err_ptr: *mut *mut c_char = &mut err;
-        let db = rocksdb_open(opts, cpath.as_ptr() as *const _, err_ptr);
+        let db = rocksdb_open(opts, cpath.as_ptr(), err_ptr);
         if !err.is_null() {
             println!("failed to open rocksdb: {}", error_message(err));
         }
@@ -83,7 +83,7 @@ fn internal() {
         rocksdb_readoptions_destroy(readopts);
         assert!(err.is_null());
         rocksdb_close(db);
-        rocksdb_destroy_db(opts, cpath.as_ptr() as *const _, err_ptr);
+        rocksdb_destroy_db(opts, cpath.as_ptr(), err_ptr);
         assert!(err.is_null());
     }
 }
