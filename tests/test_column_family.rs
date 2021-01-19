@@ -45,13 +45,14 @@ fn test_column_family() {
         match DB::open(&opts, &n) {
             Ok(_db) => panic!(
                 "should not have opened DB successfully without \
-                        specifying column
-            families"
+                        specifying column families"
             ),
-            Err(e) => assert!(e.to_string().starts_with(
-                "Invalid argument: You have to open all \
-                 column families."
-            )),
+            Err(e) => {
+                assert!(e.to_string().starts_with(
+                    "Invalid argument: Column families \
+                    not opened:"
+                ))
+            }
         }
     }
 
