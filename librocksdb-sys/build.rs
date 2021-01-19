@@ -306,8 +306,10 @@ fn build_bzip2() {
 }
 
 fn try_to_find_and_link_lib(lib_name: &str) -> bool {
-    if let Ok(_) = env::var(&format!("{}_COMPILE", lib_name)) {
-        return false;
+    if let Ok(v) = env::var(&format!("{}_COMPILE", lib_name)) {
+        if v.to_lowercase() == "true" || v == "1" {
+            return false;
+        }
     }
 
     if let Ok(lib_dir) = env::var(&format!("{}_LIB_DIR", lib_name)) {
