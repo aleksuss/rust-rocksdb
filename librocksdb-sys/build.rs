@@ -115,21 +115,21 @@ fn build_rocksdb() {
     }
 
     if target.contains("darwin") {
-        config.define("OS_MACOSX", Some("1"));
-        config.define("ROCKSDB_PLATFORM_POSIX", Some("1"));
-        config.define("ROCKSDB_LIB_IO_POSIX", Some("1"));
+        config.define("OS_MACOSX", None);
+        config.define("ROCKSDB_PLATFORM_POSIX", None);
+        config.define("ROCKSDB_LIB_IO_POSIX", None);
     } else if target.contains("android") {
-        config.define("OS_ANDROID", Some("1"));
-        config.define("ROCKSDB_PLATFORM_POSIX", Some("1"));
-        config.define("ROCKSDB_LIB_IO_POSIX", Some("1"));
+        config.define("OS_ANDROID", None);
+        config.define("ROCKSDB_PLATFORM_POSIX", None);
+        config.define("ROCKSDB_LIB_IO_POSIX", None);
     } else if target.contains("linux") {
-        config.define("OS_LINUX", Some("1"));
-        config.define("ROCKSDB_PLATFORM_POSIX", Some("1"));
-        config.define("ROCKSDB_LIB_IO_POSIX", Some("1"));
+        config.define("OS_LINUX", None);
+        config.define("ROCKSDB_PLATFORM_POSIX", None);
+        config.define("ROCKSDB_LIB_IO_POSIX", None);
     } else if target.contains("freebsd") {
-        config.define("OS_FREEBSD", Some("1"));
-        config.define("ROCKSDB_PLATFORM_POSIX", Some("1"));
-        config.define("ROCKSDB_LIB_IO_POSIX", Some("1"));
+        config.define("OS_FREEBSD", None);
+        config.define("ROCKSDB_PLATFORM_POSIX", None);
+        config.define("ROCKSDB_LIB_IO_POSIX", None);
     } else if target.contains("windows") {
         link("rpcrt4", false);
         link("shlwapi", false);
@@ -138,11 +138,10 @@ fn build_rocksdb() {
         config.define("_MBCS", None);
         config.define("WIN64", None);
         config.define("NOMINMAX", None);
-        config.define("ROCKSDB_WINDOWS_UTF8_FILENAMES", None);
 
         if &target == "x86_64-pc-windows-gnu" {
             // Tell MinGW to create localtime_r wrapper of localtime_s function.
-            config.define("_POSIX_C_SOURCE", None);
+            config.define("_POSIX_C_SOURCE", Some("1"));
             // Tell MinGW to use at least Windows Vista headers instead of the ones of Windows XP.
             // (This is minimum supported version of rocksdb)
             config.define("_WIN32_WINNT", Some("_WIN32_WINNT_VISTA"));
