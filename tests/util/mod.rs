@@ -10,7 +10,7 @@ pub struct DBPath {
 }
 
 impl DBPath {
-    /// Produces a fresh (non-existent) temporary path which will be DB::destroy'ed automatically.
+    /// Produces a fresh (non-existent) temporary path which will be destroyed automatically.
     pub fn new(prefix: &str) -> DBPath {
         let dir = tempfile::Builder::new()
             .prefix(prefix)
